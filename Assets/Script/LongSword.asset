@@ -16,3 +16,4 @@ MonoBehaviour:
   attackRange: 1.5
   attackLevel: 1
   attackCooldown: 0.5
+  damage: 3

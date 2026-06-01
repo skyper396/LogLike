@@ -9,4 +9,5 @@ public class WeaponData : ScriptableObject
     public float attackRange;    // 이 무기의 사거리
     public int attackLevel;      // 이 무기의 기본 공격 레벨
     public float attackCooldown; // 다음 공격까지의 대기 시간
+    public int damage;
 }

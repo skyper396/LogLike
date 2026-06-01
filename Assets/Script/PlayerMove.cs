@@ -59,23 +59,8 @@ public class PlayerMove : MonoBehaviour
 
     void Update()
     {
-        // 1. 상태에 따른 입력 처리
         HandleInput();
-
-        // 2. 애니메이션 파라미터 동기화
         UpdateAnimation();
-
-        // 수정 전
-        if (Input.GetMouseButtonDown(0) && currentState != PlayerState.Attack)
-        {
-            PerformAttack();
-        }
-
-        // 수정 후
-        if (Input.GetMouseButtonDown(0) && currentState != PlayerState.Attack)
-        {
-            PerformAttack(); // 무기 데이터에 정의된 값을 스스로 가져다 씁니다.
-        }
     }
 
     void HandleInput()
@@ -134,9 +119,18 @@ public class PlayerMove : MonoBehaviour
         {
             Debug.Log(enemy.name + " 히트! 무기: " + currentWeapon.weaponName + " / 레벨: " + currentWeapon.attackLevel);
 
-            if (enemy.GetComponent<EnemyTest>() != null)
+            EnemyTest enemyTest = enemy.GetComponent<EnemyTest>();
+
+            if (enemyTest != null)
             {
-                enemy.GetComponent<EnemyTest>().OnHit();
+                enemyTest.OnHit();
+            }
+
+            EnemyHealth enemyHealth = enemy.GetComponent<EnemyHealth>();
+
+            if (enemyHealth != null)
+            {
+                enemyHealth.TakeDamage(currentWeapon.damage);
             }
         }
 
@@ -173,8 +167,13 @@ public class PlayerMove : MonoBehaviour
     // 에디터에서 범위를 보기 위한 기즈모
     private void OnDrawGizmosSelected()
     {
-        if (attackPoint == null) return;
+        if (attackPoint == null || currentWeapon == null)
+            return;
+
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+        Gizmos.DrawWireSphere(
+            attackPoint.position,
+            currentWeapon.attackRange
+        );
     }
 }
